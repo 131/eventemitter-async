@@ -1,7 +1,7 @@
 {
-  "name": "eventemitter-co",
+  "name": "eventemitter-async",
   "version": "1.0.5",
-  "description": "EventEmitter with generator support",
+  "description": "Awaitable async eventEmitter",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/131/eventemitter-co.git"
+    "url": "https://github.com/131/eventemitter-async.git"
   },
   "keywords": [
     "co",
@@ -23,11 +23,10 @@
   "author": "Francois Leurent <131.js@cloudyks.org>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/131/eventemitter-co/issues"
+    "url": "https://github.com/131/eventemitter-async/issues"
   },
-  "homepage": "https://github.com/131/eventemitter-co",
+  "homepage": "https://github.com/131/eventemitter-async",
   "dependencies": {
-    "co": "^4.6.0",
     "mout": "^1.0.0",
     "uclass": "^2.4.0"
   },

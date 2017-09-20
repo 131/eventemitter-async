@@ -4,7 +4,7 @@ const expect = require('expect.js');
 const Class = require('uclass');
 const Events = require('../');
 
-const sleep = require('nyks/function/sleep');
+const sleep = require('nyks/async/sleep');
 
 
 
@@ -52,13 +52,13 @@ describe("events testing", function(){
     });
 
 
-    it("should test emit with arsg", function(){
+    it("should test emit with args", function(){
         var time = new Time(8, 55);
-        var a = 0, inc = function * (c, d){
+        var a = 0, inc = async function(c, d){
             a += c - d;
         };
 
-        var b = 0, inc2 = function * (c, d){
+        var b = 0, inc2 = async  function(c, d){
             b += c - d;
         };
 

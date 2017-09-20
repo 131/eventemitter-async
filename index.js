@@ -3,7 +3,7 @@
 const Class = require('uclass');
 const guid  = require('mout/random/guid');
 const forIn = require('mout/object/forIn');
-const co    = require('co');
+
 
 
 const EventEmitter = new Class({
@@ -25,7 +25,7 @@ const EventEmitter = new Class({
     var args = Array.prototype.slice.call(arguments, 1);
 
     forIn(this.callbacks[event], function(callback) {
-      var p = co.apply(callback.ctx, [callback.callback].concat(args));
+      var p = callback.callback.apply(callback.ctx, args);
       chain.push(p);
     });
 
