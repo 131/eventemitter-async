@@ -1,80 +1,70 @@
 "use strict";
 
-const Class = require('uclass');
-const guid  = require('mout/random/guid');
-const forIn = require('mout/object/forIn');
+
+class EventEmitter {
+  constructor() {
+    this._callbacks = {};
+
+    this.emit = this.emit.bind(this);
+    this.on   = this.on.bind(this);
+    this.once = this.once.bind(this);
+    this.off  = this.off.bind(this);
 
 
+    this.addEvent = this.addListener  = this.on;
+    this.removeListener  = this.removeAllListeners = this.off;
+    this.fireEvent  = this.emit;
+  }
 
-const EventEmitter = new Class({
-  Binds : [
-    'on', 'off', 'once', 'emit', 
-    'addEvent', 'addListener', 'removeListener', 'removeAllListeners', 'fireEvent',
-  ],
 
-  callbacks : {},
-
-  emit : function(event, payload)/**
-  * @interactive_runner hide
-  */ {
-    if(!this.callbacks[event])
+  emit(event) {
+    if(!this._callbacks[event])
       return Promise.resolve();
 
     var chain = [];
 
     var args = Array.prototype.slice.call(arguments, 1);
 
-    forIn(this.callbacks[event], function(callback) {
+    for(let callback of this._callbacks[event]) {
       var p = callback.callback.apply(callback.ctx, args);
       chain.push(p);
-    });
+    }
 
     return Promise.all(chain);
-  },
+  }
 
 
 
-  on : function(event, callback, ctx) /**
-  * @interactive_runner hide
-  */ {
+  on(event, callback, ctx = undefined)  {
     if(typeof callback != "function")
-      return console.log("you try to register a non function in " , event)
-    if(!this.callbacks[event])
-      this.callbacks[event] = {};
-    this.callbacks[event][guid()] = {callback, ctx};
-  },
+      return console.error("you try to register a non function in ", event);
+    if(!this._callbacks[event])
+      this._callbacks[event] = [];
+    this._callbacks[event].push({callback, ctx});
+  }
 
-  once : function(event, callback, ctx) /**
-  * @interactive_runner hide
-  */ {
+  once(event, callback, ctx = undefined) {
     var self = this;
-    var once = function(){
+    var once = function() {
       self.off(event, once);
       self.off(event, callback);
     };
 
     this.on(event, callback, ctx);
     this.on(event, once);
-  },
+  }
 
-  off : function(event, callback) /**
-  * @interactive_runner hide
-  */ {
+  off(event = false, callback = false)  {
     if(!event)
-      this.callbacks = {};
+      this._callbacks = {};
     else if(!callback)
-      this.callbacks[event] = {};
-    else forIn(this.callbacks[event] || {}, function(v, k) {
-      if(v.callback == callback)
-        delete this.callbacks[event][k];
-    }, this);
-  },
-});
+      this._callbacks[event] = [];
+    else
+      this._callbacks[event] =  (this._callbacks[event] || []).filter(v => v.callback != callback);
 
-EventEmitter.prototype.addEvent           = EventEmitter.prototype.on;
-EventEmitter.prototype.addListener        = EventEmitter.prototype.on;
-EventEmitter.prototype.removeListener     = EventEmitter.prototype.off;
-EventEmitter.prototype.removeAllListeners = EventEmitter.prototype.off;
-EventEmitter.prototype.fireEvent          = EventEmitter.prototype.emit;
+  }
+}
+
+
 
 module.exports = EventEmitter;

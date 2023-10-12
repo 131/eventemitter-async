@@ -34,7 +34,6 @@ You can set an optional 3rd parameter and set the context ("this") in event regi
 
 # Credits
 * [131](https://github.com/131)
-* [uclass](https://github.com/131/uclass) a pure JS/browser compliant class design syntax (ES6 classes with bindings)
 
 
 # Keywords / shout box

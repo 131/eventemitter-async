@@ -7,17 +7,18 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node node_modules/istanbul/lib/cli.js  cover --report text-summary --report html --report lcov  node_modules/mocha/bin/_mocha",
-    "coveralls": "npm install coveralls && node ./node_modules/coveralls/bin/coveralls.js < ./coverage/lcov.info"
+    "test": "npm run cover && npm run eslint",
+    "eslint": "eslint .",
+    "mocha": "mocha -b",
+    "cover": "nyc node_modules/mocha/bin/_mocha -b test/",
+    "coveralls": "npm install coveralls && node ./node_modules/coveralls/bin/coveralls.js < ./coverage/html/lcov.info"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/131/eventemitter-async.git"
   },
   "keywords": [
-    "co",
     "event",
-    "uclass",
     "eventemitter"
   ],
   "author": "Francois Leurent <131.js@cloudyks.org>",
@@ -26,14 +27,11 @@
     "url": "https://github.com/131/eventemitter-async/issues"
   },
   "homepage": "https://github.com/131/eventemitter-async",
-  "dependencies": {
-    "mout": "^1.0.0",
-    "uclass": "^2.4.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "eslint-plugin-ivs": "^2.1.0",
     "expect.js": "^0.3.1",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.0.2",
-    "nyks": "^4.0.1"
+    "mocha": "^3.1.2",
+    "nyc": "^15.1.0"
   }
 }
