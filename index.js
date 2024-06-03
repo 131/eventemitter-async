@@ -17,9 +17,9 @@ class EventEmitter {
   }
 
 
-  emit(event) {
+  emit(event, err) {
     if(!this._callbacks[event])
-      return Promise.resolve();
+      return event == "error" ? Promise.reject(err) : Promise.resolve();
 
     var chain = [];
 

@@ -103,6 +103,18 @@ describe("events testing", function() {
   });
 
 
+  it("should fail on error", async ()  => {
+    var time = new Time(8, 55);
+    try {
+      await time.emit("error", "nope");
+      expect().to.fail();
+    } catch(err) {
+      expect(err).to.eql("nope");
+    }
+  });
+
+
+
 
 
   it("should support complex mixing once & on", function() {
