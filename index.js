@@ -17,13 +17,11 @@ class EventEmitter {
   }
 
 
-  emit(event, err) {
+  emit(event, ...args) {
     if(!this._callbacks[event])
-      return event == "error" ? Promise.reject(err) : Promise.resolve();
+      return event == "error" ? Promise.reject(args[0]) : Promise.resolve();
 
     var chain = [];
-
-    var args = Array.prototype.slice.call(arguments, 1);
 
     for(let callback of this._callbacks[event]) {
       var p = callback.callback.apply(callback.ctx, args);
@@ -44,15 +42,13 @@ class EventEmitter {
   }
 
   once(event, callback, ctx = undefined) {
-    var self = this;
-    var once = function() {
-      self.off(event, once);
-      self.off(event, callback);
+    var once = (...args) => {
+      this.off(event, once);
+      return callback.apply(ctx, args);
     };
-
-    this.on(event, callback, ctx);
     this.on(event, once);
   }
+
 
   off(event = false, callback = false)  {
     if(!event)

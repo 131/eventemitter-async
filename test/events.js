@@ -94,6 +94,31 @@ describe("events testing", function() {
   });
 
 
+  it("should allow multiple subscriptions, with args and ctx", function() {
+    var time = new Time(8, 55);
+    var b = 0, a = 0, ainc = function(val) {
+        a += val;
+      }, binc = function(val) {
+        b += val;
+      };
+
+    time.once("foo", ainc);
+    time.on("foo", binc);
+
+
+    time.emit("foo", 1);
+    expect(a).to.be(1);
+    expect(b).to.be(1);
+
+    time.off("foo", binc);
+
+    time.emit("foo", 1);
+    expect(a).to.be(1);
+    expect(b).to.be(1);
+
+  });
+
+
   it("should not bother unsubscribe unknow events", function() {
     var time = new Time(8, 55);
     var inc = function() { };
